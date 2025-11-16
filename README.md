@@ -1,73 +1,455 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# BankAccount System - Test Technique Fintech
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Implémentation d'un système bancaire respectant strictement l'interface imposée, avec une architecture professionnelle basée sur **Domain-Driven Design (DDD)**, **CQRS** et **Architecture Hexagonale**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📋 Interface Imposée (Strictement Respectée)
 
-## Description
+L'interface demandée est **strictement respectée** dans la classe `BankAccount` :
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ yarn install
+```typescript
+export class BankAccount {
+  deposit(amount: number): void; // ✅ Conforme - Aucune modification
+  withdraw(amount: number): void; // ✅ Conforme - Aucune modification
+  printStatement(): void; // ✅ Conforme - Aucune modification
+}
 ```
 
-## Running the app
+**✅ Aucune modification de signature** - L'interface est respectée à 100%.
 
-```bash
-# development
-$ yarn run start
+**Fonctionnalités :**
 
-# watch mode
-$ yarn run start:dev
+- ✅ `deposit(int amount)` : Refuse montants nuls ou négatifs
+- ✅ `withdraw(int amount)` : Refuse montants nuls/négatifs et découvert
+- ✅ `printStatement()` : Affiche relevé trié par date décroissante avec solde cumulatif
 
-# production mode
-$ yarn run start:prod
+## 🚀 Utilisation Simple (Interface de Base)
+
+### Exemple Minimal
+
+```typescript
+import { BankAccount } from './src/domain/model/BankAccount';
+
+// Créer un compte (sans infrastructure)
+const account = new BankAccount('account-1');
+
+// Utiliser l'interface conforme
+account.deposit(1000); // ✅ deposit(amount: number): void
+account.deposit(2000); // ✅ Date gérée en interne (Date.now())
+account.withdraw(500); // ✅ withdraw(amount: number): void
+
+// Afficher le relevé
+account.printStatement(); // ✅ printStatement(): void
+
+// Output:
+// Date || Montant || Solde
+// 2024-01-10 || -500 || 2500
+// 2024-01-10 || 2000 || 3000
+// 2024-01-10 || 1000 || 1000
 ```
 
-## Test
+### Exemple avec Contrôle des Dates (Pour Tests)
 
-```bash
-# unit tests
-$ yarn run test
+```typescript
+import { BankAccount } from './src/domain/model/BankAccount';
+import { FakeClock } from './src/infrastructure/adapters/FakeClock';
 
-# e2e tests
-$ yarn run test:e2e
+// Créer un compte avec un Clock pour contrôler les dates (optionnel)
+const clock = new FakeClock(new Date('2024-01-10'));
+const account = new BankAccount('account-1', clock);
 
-# test coverage
-$ yarn run test:cov
+account.deposit(1000);
+clock.setDate(new Date('2024-01-13'));
+account.deposit(2000);
+clock.setDate(new Date('2024-01-14'));
+account.withdraw(500);
+
+account.printStatement();
+// Output:
+// Date || Montant || Solde
+// 2024-01-14 || -500 || 2500
+// 2024-01-13 || 2000 || 3000
+// 2024-01-10 || 1000 || 1000
 ```
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🎁 Bonus Full-Stack (Optionnel)
 
-## Stay in touch
+Ce projet va **au-delà des exigences de base** en proposant des fonctionnalités bonus qui démontrent une maîtrise full-stack :
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- ✅ **API REST** : Endpoints `/deposit`, `/withdraw`, `/statement`, `/balance`
+- ✅ **Swagger/OpenAPI** : Documentation interactive de l'API
+- ✅ **Authentification JWT** : Système d'authentification complet
+- ✅ **Persistance PostgreSQL** : Base de données relationnelle avec TypeORM
+- ✅ **Architecture Avancée** : Hexagonale + CQRS + DDD
+- ✅ **Tests Complets** : 12 fichiers de tests avec couverture complète
 
-## License
+**Note importante :** Ces bonus sont **optionnels** et démontrent une maîtrise full-stack. L'interface de base est respectée dans `BankAccount` et peut être utilisée **sans aucune infrastructure**.
 
-Nest is [MIT licensed](LICENSE).
+## 📐 Architecture
+
+### Structure du Projet
+
+```
+/src
+  /domain                    # Couche Domain (Cœur métier)
+    /model
+      BankAccount.ts         # Aggregate Root
+      Transaction.ts         # Value Object
+      TransactionType.ts    # Enum
+    /services
+      Clock.ts              # Port (interface)
+      StatementPrinter.ts   # Port (interface)
+    /errors
+      NegativeAmountError.ts
+      InsufficientFundsError.ts
+
+  /application               # Couche Application (CQRS)
+    /commands
+      /implements
+        DepositCommand.ts
+        WithdrawCommand.ts
+      /handlers
+        DepositHandler.ts
+        WithdrawHandler.ts
+    /queries
+      /implements
+        GetBalanceQuery.ts
+        GetStatementQuery.ts
+      /handlers
+        GetBalanceHandler.ts
+        GetStatementHandler.ts
+    /dto
+      StatementLine.ts
+
+  /ports                     # Ports Hexagonaux
+    BankAccountRepository.ts
+
+  /infrastructure            # Couche Infrastructure
+    /adapters
+      InMemoryBankAccountRepository.ts
+      ConsoleStatementPrinter.ts
+      SystemClock.ts
+      FakeClock.ts           # Pour les tests
+    /controllers
+      BankAccountController.ts  # Implémente l'interface imposée
+    index.ts                 # Wiring NestJS
+
+/tests
+  domain/*.spec.ts
+  application/commands/*.spec.ts
+  application/queries/*.spec.ts
+  infrastructure/*.spec.ts
+```
+
+## 🏗️ Principes Architecturaux
+
+### 1. Architecture Hexagonale (Ports & Adapters)
+
+L'architecture hexagonale isole le domaine métier de l'infrastructure technique.
+
+**Ports (Interfaces) :**
+
+- `BankAccountRepository` : Abstraction pour la persistance
+- `Clock` : Abstraction pour le temps (permettant de mocker les dates)
+- `StatementPrinter` : Abstraction pour l'affichage
+
+**Adapters (Implémentations) :**
+
+- `TypeOrmBankAccountRepository` : Persistance PostgreSQL via TypeORM
+- `TypeOrmUserRepository` : Persistance PostgreSQL via TypeORM
+- `SystemClock` : Horloge système réelle
+- `ConsoleStatementPrinter` : Affichage console
+- `FakeClock` : Horloge mockable pour les tests
+
+**Avantages :**
+
+- Le domaine est indépendant de l'infrastructure
+- Facile de changer de base de données, d'UI, etc.
+- Tests isolés avec des mocks
+
+### 2. Domain-Driven Design (DDD)
+
+**Aggregate Root : `BankAccount`**
+
+- Encapsule toutes les règles métier
+- Gère l'état interne (transactions)
+- Aucune dépendance vers l'infrastructure
+- Transactions immuables
+
+**Règles Métier :**
+
+- ✅ `amount > 0` pour toutes les transactions
+- ✅ Pas de découvert autorisé
+- ✅ Solde calculé à partir des transactions
+- ✅ Transactions immuables
+
+**Value Objects :**
+
+- `Transaction` : Immutable, contient type, montant, date
+- `TransactionType` : Enum (DEPOSIT, WITHDRAWAL)
+
+**Domain Errors :**
+
+- `NegativeAmountError` : Montant négatif ou zéro
+- `InsufficientFundsError` : Solde insuffisant
+
+### 3. CQRS (Command Query Responsibility Segregation)
+
+Séparation stricte entre les opérations d'écriture (Commands) et de lecture (Queries).
+
+**Commands (Écriture) :**
+
+- `DepositCommand` → `DepositHandler`
+- `WithdrawCommand` → `WithdrawHandler`
+
+**Queries (Lecture) :**
+
+- `GetBalanceQuery` → `GetBalanceHandler`
+- `GetStatementQuery` → `GetStatementHandler`
+
+**Avantages :**
+
+- Séparation claire des responsabilités
+- Optimisation indépendante (cache pour queries, validation pour commands)
+- Scalabilité (lecture/écriture séparées)
+
+## 🔄 Flux d'Exécution
+
+### Dépôt (Deposit)
+
+```
+BankAccountController.deposit(amount)
+  ↓
+DepositCommand(accountId, amount)
+  ↓
+DepositHandler.execute(command)
+  ↓
+Repository.findById() → BankAccount (ou création)
+  ↓
+BankAccount.deposit(amount, clock.now())
+  ↓
+Repository.save(account)
+```
+
+### Retrait (Withdraw)
+
+```
+BankAccountController.withdraw(amount)
+  ↓
+WithdrawCommand(accountId, amount)
+  ↓
+WithdrawHandler.execute(command)
+  ↓
+Repository.findById() → BankAccount
+  ↓
+BankAccount.withdraw(amount, clock.now())
+  ↓ (vérifie solde suffisant)
+Repository.save(account)
+```
+
+### Affichage du Relevé (Print Statement)
+
+```
+BankAccountController.printStatement()
+  ↓
+GetStatementQuery(accountId)
+  ↓
+GetStatementHandler.execute(query)
+  ↓
+Repository.findById() → BankAccount
+  ↓
+Calcul des StatementLine (tri DESC par date)
+  ↓
+StatementPrinter.print(lines)
+```
+
+## 🧪 Tests
+
+### Tests du Domain
+
+- ✅ Transactions immuables
+- ✅ Règles métier (montant positif, pas de découvert)
+- ✅ Calcul du solde correct
+
+### Tests des Commands
+
+- ✅ Dépôt positif → OK
+- ✅ Retrait solde insuffisant → erreur
+- ✅ Validation des montants
+
+### Tests des Queries
+
+- ✅ Solde correct
+- ✅ Statement trié DESC par date
+- ✅ Calcul du running balance
+
+### Tests de l'Infrastructure
+
+- ✅ Repository mocké
+- ✅ Printer mocké (pas de console.log dans tests)
+- ✅ Clock mockée (FakeClock)
+
+## 🚀 Utilisation
+
+### Installation
+
+```bash
+yarn install
+```
+
+### Tests
+
+```bash
+# Tests unitaires
+yarn test
+
+# Tests avec couverture
+yarn test:cov
+
+# Tests en mode watch
+yarn test:watch
+```
+
+---
+
+## 🎁 Configuration Bonus (Full-Stack)
+
+Les sections suivantes concernent les **bonus optionnels** (API REST, base de données, etc.). L'interface de base fonctionne **sans ces éléments**.
+
+### Configuration de la Base de Données PostgreSQL (Bonus)
+
+L'application peut utiliser PostgreSQL avec TypeORM pour la persistance (bonus full-stack).
+
+#### 1. Installer PostgreSQL
+
+Assurez-vous que PostgreSQL est installé et en cours d'exécution sur votre machine.
+
+#### 2. Créer la Base de Données
+
+```bash
+# Se connecter à PostgreSQL
+psql -U postgres
+
+# Créer la base de données
+CREATE DATABASE core_api;
+
+# Quitter
+\q
+```
+
+#### 3. Configuration des Variables d'Environnement
+
+Créez un fichier `.env` à la racine du projet avec les variables suivantes :
+
+```env
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=core_api
+
+# JWT Configuration
+JWT_SECRET=your-secret-key-change-in-production
+
+# Environment
+NODE_ENV=development
+```
+
+**Note :** En développement, TypeORM créera automatiquement les tables (`synchronize: true`). En production, utilisez des migrations.
+
+#### 4. Structure de la Base de Données
+
+Les tables suivantes sont créées automatiquement :
+
+- **users** : Utilisateurs du système
+- **bank_accounts** : Comptes bancaires
+- **transactions** : Transactions (dépôts et retraits)
+
+### Exécution de l'API REST (Bonus)
+
+```bash
+# Développement
+yarn start:dev
+
+# Production
+yarn start:prod
+```
+
+L'API sera disponible sur `http://localhost:3000` avec la documentation Swagger sur `http://localhost:3000/api/docs`.
+
+### Utilisation de l'API REST (Bonus)
+
+```bash
+# Dépôt
+curl -X POST http://localhost:3000/bank-account/deposit \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"amount": 1000}'
+
+# Retrait
+curl -X POST http://localhost:3000/bank-account/withdraw \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"amount": 500}'
+
+# Relevé
+curl -X GET http://localhost:3000/bank-account/statement \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Solde
+curl -X GET http://localhost:3000/bank-account/balance \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## 🎯 Choix Architecturaux
+
+### Pourquoi CQRS ?
+
+- Séparation claire lecture/écriture
+- Optimisation indépendante
+- Facilite l'ajout de fonctionnalités (audit, cache, etc.)
+
+### Pourquoi Architecture Hexagonale ?
+
+- Isolation du domaine
+- Testabilité maximale
+- Flexibilité pour changer d'infrastructure
+
+### Pourquoi DDD ?
+
+- Modélisation métier claire
+- Règles métier centralisées
+- Code expressif et maintenable
+
+### Pourquoi NestJS ?
+
+- Injection de dépendances native
+- Structure modulaire
+- Support TypeScript complet
+- Facilite l'implémentation des patterns
+
+## 📝 Notes Techniques
+
+- **Transactions immuables** : Chaque transaction est un objet immuable
+- **Aggregate Root** : `BankAccount` est l'unique point d'entrée pour modifier l'état
+- **Ports & Adapters** : Toutes les dépendances externes sont abstraites
+- **Tests isolés** : Chaque couche testée indépendamment avec mocks
+- **Type Safety** : TypeScript strict pour éviter les erreurs à l'exécution
+
+## 🔮 Évolutions Possibles
+
+- Event Sourcing pour l'historique complet
+- Projections CQRS pour optimiser les queries
+- Front-end React/Vue/Angular
+- Application mobile (React Native, Flutter)
+- CI/CD avec GitHub Actions
+- Monitoring et logging avancés
+
+## 📚 Références
+
+- [Domain-Driven Design - Eric Evans](https://www.domainlanguage.com/ddd/)
+- [CQRS Pattern - Martin Fowler](https://martinfowler.com/bliki/CQRS.html)
+- [Hexagonal Architecture - Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture/)
+- [NestJS Documentation](https://docs.nestjs.com/)
