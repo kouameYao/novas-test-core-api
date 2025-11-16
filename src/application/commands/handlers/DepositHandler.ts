@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { DepositCommand } from '../implements/DepositCommand';
-import { BankAccountRepository } from '../../../ports/BankAccountRepository';
+import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
 import { Clock } from '../../../domain/services/Clock';
 import { BankAccount } from '../../../domain/model/BankAccount';
 
@@ -20,7 +20,6 @@ export class DepositHandler {
       account = new BankAccount(command.accountId, this.clock);
     }
 
-    // Use the new interface-compliant method
     account.deposit(command.amount);
     await this.repository.save(account);
   }

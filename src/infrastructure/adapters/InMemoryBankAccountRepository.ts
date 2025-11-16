@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BankAccountRepository } from '../../ports/BankAccountRepository';
+import { BankAccountRepository } from '../../domain/ports/BankAccountRepository';
 import { BankAccount } from '../../domain/model/BankAccount';
 import { TransactionType } from '../../domain/model/TransactionType';
 

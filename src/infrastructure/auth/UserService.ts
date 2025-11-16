@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserRepository } from '../../ports/UserRepository';
-import { BankAccountRepository } from '../../ports/BankAccountRepository';
+import { UserRepository } from '../../domain/ports/UserRepository';
+import { BankAccountRepository } from '../../domain/ports/BankAccountRepository';
 import { User } from '../../domain/model/User';
 import { BankAccount } from '../../domain/model/BankAccount';
 import { v4 as uuidv4 } from 'uuid';

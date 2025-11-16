@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { GetBalanceQuery } from '../implements/GetBalanceQuery';
-import { BankAccountRepository } from '../../../ports/BankAccountRepository';
+import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
 
 @Injectable()
 export class GetBalanceHandler {

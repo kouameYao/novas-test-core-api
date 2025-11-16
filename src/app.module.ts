@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BankAccountModule } from './infrastructure/index';
 import { AuthModule } from './infrastructure/auth/AuthModule';
-import { getDatabaseConfig } from './infrastructure/config/database.config';
+import { PrismaModule } from './infrastructure/config/PrismaModule';
+import { getDatabaseUrl } from './infrastructure/config/database.config';
+
+// Set DATABASE_URL if not already set
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = getDatabaseUrl();
+}
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(getDatabaseConfig()),
-    AuthModule,
-    BankAccountModule,
-  ],
+  imports: [PrismaModule, AuthModule, BankAccountModule],
   controllers: [AppController],
   providers: [AppService],
 })

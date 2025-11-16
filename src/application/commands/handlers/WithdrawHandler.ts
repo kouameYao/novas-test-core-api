@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { WithdrawCommand } from '../implements/WithdrawCommand';
-import { BankAccountRepository } from '../../../ports/BankAccountRepository';
+import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
 import { Clock } from '../../../domain/services/Clock';
 
 @Injectable()
@@ -19,7 +19,6 @@ export class WithdrawHandler {
       throw new Error(`Account ${command.accountId} not found`);
     }
 
-    // Use the new interface-compliant method
     account.withdraw(command.amount);
     await this.repository.save(account);
   }

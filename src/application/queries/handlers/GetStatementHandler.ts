@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { GetStatementQuery } from '../implements/GetStatementQuery';
-import { BankAccountRepository } from '../../../ports/BankAccountRepository';
+import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
 import { StatementLine } from '../../dto/StatementLine';
 import { TransactionType } from '../../../domain/model/TransactionType';
 
