@@ -4,7 +4,7 @@ export class WithdrawDto {
   @ApiProperty({
     description: 'Amount to withdraw',
     example: 50,
-    minimum: 0.01,
+    minimum: 100,
   })
   amount: number;
 }

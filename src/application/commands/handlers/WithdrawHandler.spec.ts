@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { WithdrawHandler } from './WithdrawHandler';
 import { WithdrawCommand } from '../implements/WithdrawCommand';
-import { BankAccountRepository } from '../../../ports/BankAccountRepository';
+import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
 import { Clock } from '../../../domain/services/Clock';
 import { BankAccount } from '../../../domain/model/BankAccount';
 import { InsufficientFundsError } from '../../../domain/errors/InsufficientFundsError';

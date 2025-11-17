@@ -6,6 +6,8 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -25,14 +27,15 @@ import { DepositDto } from '../../application/dto/DepositDto';
 import { WithdrawDto } from '../../application/dto/WithdrawDto';
 import { StatementLine } from '../../application/dto/StatementLine';
 import { BalanceResponseDto } from '../../application/dto/BalanceResponseDto';
+import { JwtAuthGuard } from '../auth/JwtAuthGuard';
+import { User } from '../../domain/model/User';
 
 @ApiTags('bank-account')
 @ApiBearerAuth()
 @Controller('bank-account')
+@UseGuards(JwtAuthGuard)
 @Injectable()
 export class BankAccountController {
-  private readonly DEFAULT_ACCOUNT_ID = 'default-account';
-
   constructor(
     private readonly depositHandler: DepositHandler,
     private readonly withdrawHandler: WithdrawHandler,
@@ -60,11 +63,12 @@ export class BankAccountController {
     status: 400,
     description: 'Invalid amount (must be positive)',
   })
-  async deposit(@Body() depositDto: DepositDto): Promise<{ message: string }> {
-    const command = new DepositCommand(
-      this.DEFAULT_ACCOUNT_ID,
-      depositDto.amount,
-    );
+  async deposit(
+    @Body() depositDto: DepositDto,
+    @Request() req: { user: User },
+  ): Promise<{ message: string }> {
+    const bankAccountId = req.user.getBankAccountId();
+    const command = new DepositCommand(bankAccountId, depositDto.amount);
     await this.depositHandler.execute(command);
     return { message: 'Deposit successful' };
   }
@@ -91,11 +95,10 @@ export class BankAccountController {
   })
   async withdraw(
     @Body() withdrawDto: WithdrawDto,
+    @Request() req: { user: User },
   ): Promise<{ message: string }> {
-    const command = new WithdrawCommand(
-      this.DEFAULT_ACCOUNT_ID,
-      withdrawDto.amount,
-    );
+    const bankAccountId = req.user.getBankAccountId();
+    const command = new WithdrawCommand(bankAccountId, withdrawDto.amount);
     await this.withdrawHandler.execute(command);
     return { message: 'Withdrawal successful' };
   }
@@ -110,8 +113,9 @@ export class BankAccountController {
     description: 'Statement retrieved successfully',
     type: [StatementLine],
   })
-  async getStatement(): Promise<StatementLine[]> {
-    const query = new GetStatementQuery(this.DEFAULT_ACCOUNT_ID);
+  async getStatement(@Request() req: { user: User }): Promise<StatementLine[]> {
+    const bankAccountId = req.user.getBankAccountId();
+    const query = new GetStatementQuery(bankAccountId);
     return await this.getStatementHandler.execute(query);
   }
 
@@ -125,8 +129,11 @@ export class BankAccountController {
     description: 'Balance retrieved successfully',
     type: BalanceResponseDto,
   })
-  async getBalance(): Promise<BalanceResponseDto> {
-    const query = new GetBalanceQuery(this.DEFAULT_ACCOUNT_ID);
+  async getBalance(
+    @Request() req: { user: User },
+  ): Promise<BalanceResponseDto> {
+    const bankAccountId = req.user.getBankAccountId();
+    const query = new GetBalanceQuery(bankAccountId);
     const balance = await this.getBalanceHandler.execute(query);
     return { balance };
   }

@@ -1,16 +1,20 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserEntity } from '../entities/UserEntity';
-import { BankAccountEntity } from '../entities/BankAccountEntity';
-import { TransactionEntity } from '../entities/TransactionEntity';
+/**
+ * Database configuration for Prisma
+ * Prisma uses DATABASE_URL environment variable
+ * Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+ */
+export const getDatabaseUrl = (): string => {
+  // If DATABASE_URL is explicitly set, use it
+  if (process.env.DATABASE_URL) {
+    return process.env.DATABASE_URL;
+  }
 
-export const getDatabaseConfig = (): TypeOrmModuleOptions => ({
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_DATABASE || 'novascend_bank_api',
-  entities: [UserEntity, BankAccountEntity, TransactionEntity],
-  synchronize: process.env.NODE_ENV !== 'production', // Auto-create tables in dev
-  logging: process.env.NODE_ENV === 'development',
-});
+  // Otherwise, construct it from individual environment variables
+  const host = process.env.DB_HOST || 'localhost';
+  const port = process.env.DB_PORT || '5432';
+  const username = process.env.DB_USERNAME || 'postgres';
+  const password = process.env.DB_PASSWORD || 'postgres';
+  const database = process.env.DB_DATABASE || 'novascend_bank_api';
+
+  return `postgresql://${username}:${password}@${host}:${port}/${database}?schema=public`;
+};
