@@ -3,7 +3,7 @@ import { DepositHandler } from './DepositHandler';
 import { DepositCommand } from '../implements/DepositCommand';
 import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
 import { Clock } from '../../../domain/services/Clock';
-import { BankAccount } from '../../../domain/model/BankAccount';
+import { BankAccount } from '../../../domain/entities/BankAccount';
 
 describe('DepositHandler', () => {
   let handler: DepositHandler;

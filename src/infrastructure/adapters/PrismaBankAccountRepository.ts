@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { BankAccountRepository } from '../../domain/ports/BankAccountRepository';
-import { BankAccount } from '../../domain/model/BankAccount';
-import { Transaction } from '../../domain/model/Transaction';
-import { TransactionType } from '../../domain/model/TransactionType';
+import { BankAccount } from '../../domain/entities/BankAccount';
+import { Transaction } from '../../domain/entities/Transaction';
+import { TransactionType } from '../../domain/entities/TransactionType';
 import { PrismaService } from '../config/PrismaService';
 
 @Injectable()

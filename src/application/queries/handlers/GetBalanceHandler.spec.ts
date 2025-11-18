@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GetBalanceHandler } from './GetBalanceHandler';
 import { GetBalanceQuery } from '../implements/GetBalanceQuery';
 import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
-import { BankAccount } from '../../../domain/model/BankAccount';
+import { BankAccount } from '../../../domain/entities/BankAccount';
 
 describe('GetBalanceHandler', () => {
   let handler: GetBalanceHandler;

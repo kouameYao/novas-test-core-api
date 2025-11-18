@@ -1,7 +1,7 @@
 import { BankAccount } from './BankAccount';
 import { TransactionType } from './TransactionType';
-import { NegativeAmountError } from '../errors/NegativeAmountError';
-import { InsufficientFundsError } from '../errors/InsufficientFundsError';
+import { NegativeAmountError } from '../exceptions/NegativeAmountError';
+import { InsufficientFundsError } from '../exceptions/InsufficientFundsError';
 
 describe('BankAccount', () => {
   const accountId = 'test-account';

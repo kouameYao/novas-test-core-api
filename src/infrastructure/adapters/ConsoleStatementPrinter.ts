@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { StatementPrinter } from '../../domain/services/StatementPrinter';
-import { StatementLine } from '../../application/dto/StatementLine';
+import { StatementLine } from '../../interface/dto/StatementLine';
 
 @Injectable()
 export class ConsoleStatementPrinter implements StatementPrinter {
