@@ -92,6 +92,19 @@ export class BankAccountController {
   @ApiResponse({
     status: 400,
     description: 'Invalid amount (must be positive) or insufficient funds',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 400 },
+        error: { type: 'string', example: 'InsufficientFundsError' },
+        message: {
+          type: 'string',
+          example: 'Insufficient funds.',
+        },
+        balance: { type: 'number', example: 100 },
+        requested: { type: 'number', example: 200 },
+      },
+    },
   })
   async withdraw(
     @Body() withdrawDto: WithdrawDto,

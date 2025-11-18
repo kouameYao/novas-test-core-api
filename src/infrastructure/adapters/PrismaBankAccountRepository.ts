@@ -10,7 +10,6 @@ export class PrismaBankAccountRepository implements BankAccountRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findById(id: string): Promise<BankAccount | null> {
-    console.log('findById', id);
     const entity = await this.prisma.bankAccount.findUnique({
       where: { id },
       include: {
