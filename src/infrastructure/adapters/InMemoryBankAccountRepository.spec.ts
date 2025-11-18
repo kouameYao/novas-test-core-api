@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { InMemoryBankAccountRepository } from './InMemoryBankAccountRepository';
-import { BankAccount } from '../../domain/model/BankAccount';
+import { BankAccount } from '../../domain/entities/BankAccount';
 
 describe('InMemoryBankAccountRepository', () => {
   let repository: InMemoryBankAccountRepository;

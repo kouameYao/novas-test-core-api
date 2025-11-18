@@ -1,7 +1,7 @@
 import { Transaction } from './Transaction';
 import { TransactionType } from './TransactionType';
-import { NegativeAmountError } from '../errors/NegativeAmountError';
-import { InsufficientFundsError } from '../errors/InsufficientFundsError';
+import { NegativeAmountError } from '../exceptions/NegativeAmountError';
+import { InsufficientFundsError } from '../exceptions/InsufficientFundsError';
 import { Clock } from '../services/Clock';
 
 /**

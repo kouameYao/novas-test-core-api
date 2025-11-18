@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GetStatementHandler } from './GetStatementHandler';
 import { GetStatementQuery } from '../implements/GetStatementQuery';
 import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
-import { BankAccount } from '../../../domain/model/BankAccount';
+import { BankAccount } from '../../../domain/entities/BankAccount';
 
 describe('GetStatementHandler', () => {
   let handler: GetStatementHandler;

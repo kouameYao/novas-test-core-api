@@ -7,8 +7,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { InsufficientFundsError } from '../../domain/errors/InsufficientFundsError';
-import { NegativeAmountError } from '../../domain/errors/NegativeAmountError';
+import { InsufficientFundsError } from '../../domain/exceptions/InsufficientFundsError';
+import { NegativeAmountError } from '../../domain/exceptions/NegativeAmountError';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {

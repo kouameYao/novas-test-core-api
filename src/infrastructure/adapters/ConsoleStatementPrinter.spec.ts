@@ -1,5 +1,5 @@
 import { ConsoleStatementPrinter } from './ConsoleStatementPrinter';
-import { StatementLine } from '../../application/dto/StatementLine';
+import { StatementLine } from '../../interface/dto/StatementLine';
 
 describe('ConsoleStatementPrinter', () => {
   let printer: ConsoleStatementPrinter;

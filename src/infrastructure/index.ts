@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { BankAccountController } from './controllers/BankAccountController';
+import { BankAccountController } from '../interface/controllers/BankAccountController';
 import { DepositHandler } from '../application/commands/handlers/DepositHandler';
 import { WithdrawHandler } from '../application/commands/handlers/WithdrawHandler';
 import { GetBalanceHandler } from '../application/queries/handlers/GetBalanceHandler';

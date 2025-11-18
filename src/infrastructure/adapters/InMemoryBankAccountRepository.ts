@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BankAccountRepository } from '../../domain/ports/BankAccountRepository';
-import { BankAccount } from '../../domain/model/BankAccount';
-import { TransactionType } from '../../domain/model/TransactionType';
+import { BankAccount } from '../../domain/entities/BankAccount';
+import { TransactionType } from '../../domain/entities/TransactionType';
 
 @Injectable()
 export class InMemoryBankAccountRepository implements BankAccountRepository {

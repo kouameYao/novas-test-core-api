@@ -1,4 +1,4 @@
-import { StatementLine } from '../../application/dto/StatementLine';
+import { StatementLine } from '../../interface/dto/StatementLine';
 
 export interface StatementPrinter {
   print(lines: StatementLine[]): void;

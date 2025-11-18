@@ -23,16 +23,16 @@ import { DepositCommand } from '../../application/commands/implements/DepositCom
 import { WithdrawCommand } from '../../application/commands/implements/WithdrawCommand';
 import { GetStatementQuery } from '../../application/queries/implements/GetStatementQuery';
 import { GetBalanceQuery } from '../../application/queries/implements/GetBalanceQuery';
-import { DepositDto } from '../../application/dto/DepositDto';
-import { WithdrawDto } from '../../application/dto/WithdrawDto';
-import { StatementLine } from '../../application/dto/StatementLine';
-import { BalanceResponseDto } from '../../application/dto/BalanceResponseDto';
-import { JwtAuthGuard } from '../auth/JwtAuthGuard';
-import { User } from '../../domain/model/User';
+import { DepositDto } from '../dto/DepositDto';
+import { WithdrawDto } from '../dto/WithdrawDto';
+import { StatementLine } from '../dto/StatementLine';
+import { BalanceResponseDto } from '../dto/BalanceResponseDto';
+import { JwtAuthGuard } from '../../infrastructure/auth/JwtAuthGuard';
+import { User } from '../../domain/entities/User';
 
-@ApiTags('bank-account')
+@ApiTags('bank-accounts')
 @ApiBearerAuth()
-@Controller('bank-account')
+@Controller('bank-accounts')
 @UseGuards(JwtAuthGuard)
 @Injectable()
 export class BankAccountController {

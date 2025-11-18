@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { DepositCommand } from '../implements/DepositCommand';
 import { BankAccountRepository } from '../../../domain/ports/BankAccountRepository';
 import { Clock } from '../../../domain/services/Clock';
-import { BankAccount } from '../../../domain/model/BankAccount';
+import { BankAccount } from '../../../domain/entities/BankAccount';
 
 @Injectable()
 export class DepositHandler {

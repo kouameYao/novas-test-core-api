@@ -1,4 +1,4 @@
-import { BankAccount } from '../model/BankAccount';
+import { BankAccount } from '../entities/BankAccount';
 
 export interface BankAccountRepository {
   findById(id: string): Promise<BankAccount | null>;

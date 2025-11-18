@@ -1,7 +1,7 @@
 import { BankAccount } from './BankAccount';
 import { FakeClock } from '../../infrastructure/adapters/FakeClock';
-import { NegativeAmountError } from '../errors/NegativeAmountError';
-import { InsufficientFundsError } from '../errors/InsufficientFundsError';
+import { NegativeAmountError } from '../exceptions/NegativeAmountError';
+import { InsufficientFundsError } from '../exceptions/InsufficientFundsError';
 
 /**
  * Tests demonstrating that BankAccount respects the immutable interface:

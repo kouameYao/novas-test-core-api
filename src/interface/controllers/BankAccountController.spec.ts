@@ -4,7 +4,7 @@ import { DepositHandler } from '../../application/commands/handlers/DepositHandl
 import { WithdrawHandler } from '../../application/commands/handlers/WithdrawHandler';
 import { GetStatementHandler } from '../../application/queries/handlers/GetStatementHandler';
 import { StatementPrinter } from '../../domain/services/StatementPrinter';
-import { StatementLine } from '../../application/dto/StatementLine';
+import { StatementLine } from '../dto/StatementLine';
 
 describe('BankAccountController', () => {
   let controller: BankAccountController;
