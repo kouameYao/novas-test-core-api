@@ -77,8 +77,8 @@ describe('WithdrawHandler', () => {
     );
   });
 
-  it('should use clock for transaction date', async () => {
-    const account = new BankAccount(accountId);
+  it('should use clock for transaction date when account has clock', async () => {
+    const account = new BankAccount(accountId, clock);
     account.depositWithDate(100, testDate);
     repository.findById.mockResolvedValue(account);
 
