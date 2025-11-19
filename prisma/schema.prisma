@@ -32,13 +32,13 @@ model BankAccount {
 }
 
 model Transaction {
-  id            String        @id @default(uuid()) @db.Uuid
-  bankAccountId String        @db.Uuid
-  bankAccount   BankAccount   @relation(fields: [bankAccountId], references: [id], onDelete: Cascade)
-  type          String        @db.VarChar(20)
+  id            String      @id @default(uuid()) @db.Uuid
+  bankAccountId String      @db.Uuid
+  bankAccount   BankAccount @relation(fields: [bankAccountId], references: [id], onDelete: Cascade)
+  type          String      @db.VarChar(20)
   amount        Int
   date          DateTime
-  createdAt     DateTime      @default(now())
+  createdAt     DateTime    @default(now())
 
   @@map("transactions")
 }
